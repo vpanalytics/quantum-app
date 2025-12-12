@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Minds - Plataforma Completa</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================= */
+        /* == RESET E CONFIGURAÇÕES GLOBAIS           == */
+        /* ============================================= */
+        :root {
+            --background-light: #FFFFFF;
+            --background-panel: #F9FAFB;
+            --gold-primary: #c5a773;
+            --gold-secondary: #f7f4ef;
+            --gold-glow: rgba(197, 167, 115, 0.5 );
+            --text-dark: #333333;
+            --text-secondary: #6B7280;
+            --border-color: #E5E7EB;
+            --font-title: 'Orbitron', sans-serif;
+            --font-body: 'Exo 2', sans-serif;
+            --font-chat: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            overflow: hidden;
+        }
+
+        /* ============================================= */
+        /* == TELA 1: PÁGINA DE LOGIN                 == */
+        /* ============================================= */
+        #login-section { 
+            display: flex; 
+            width: 100vw; 
+            height: 100vh;
+            justify-content: center;
+            background-image: url('https://victorpaulovichbueno-gif.github.io/sala-quantum/sala' );
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .left-panel, .right-panel { 
+            height: 100%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 2rem; 
+        }
+/* --- ESTILOS CORRIGIDOS E FINAIS PARA A FORMAÇÃO DE LOGIN --- */
+
+/* 1. O container principal com a teia de fundo */
+.static-formation { 
+    position: relative; 
+    width: 700px;
+    height: 700px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    background-image: url('https://victorpaulovichbueno-gif.github.io/teia-quantum/foto' );
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translateY(-4%);
+}
+
+/* 2. O container de CADA agente (que será criado pelo JS) */
+#login-section .agent-container {
+    position: absolute; /* Essencial para o posicionamento com top/left */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+/* NOVA REGRA: BRILHO FIXO APENAS NO AGENTE CENTRAL (ALLEX) */
+#login-section .central-agent {
+    filter: drop-shadow(0 0 15px var(--gold-primary));
+}
+
+
+/* 3. O avatar (imagem) de cada agente */
+#login-section .agent-avatar {
+    width: 90px;
+    height: auto;
+    display: block;
+}
+#login-section .central-agent .agent-avatar {
+    width: 130px; /* Avatar do Allex é maior */
+}
+
+/* 4. O crachá (título) de cada agente */
+#login-section .agent-info {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000b1b;
+    color: var(--gold-primary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    white-space: nowrap;
+    border: 1px solid rgba(197, 167, 115, 0.3);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+#login-section .central-agent .agent-info {
+    background-color: var(--gold-primary);
+    color: #000b1b;
+    font-size: 0.8rem;
+}
+
+/* 5. AS COORDENADAS FINAIS DA GRADE (Layout 3-4-5-4-3) */
+#login-section [data-agent-id="lucas"]    { top: 4%; left: 25%; transform: translateX(-50%); }
+#login-section [data-agent-id="fernando"] { top: 4%; left: 50%; transform: translateX(-50%); }
+#login-section [data-agent-id="ricardo"]  { top: 4%; left: 75%; transform: translateX(-50%); }
+
+#login-section [data-agent-id="julia"]    { top: 21%; left: 15%; transform: translateX(-50%); }
+#login-section [data-agent-id="rafaela"]  { top: 21%; left: 37%; transform: translateX(-50%); }
+#login-section [data-agent-id="leo"]      { top: 21%; left: 63%; transform: translateX(-50%); }
+#login-section [data-agent-id="marcos"]   { top: 21%; left: 85%; transform: translateX(-50%); }
+
+#login-section [data-agent-id="camila"]   { top: 42%; left: 5%;  transform: translateX(-50%); }
+#login-section [data-agent-id="isabela"]  { top: 42%; left: 25%; transform: translateX(-50%); }
+#login-section [data-agent-id="allex"]    { top: 40%; left: 50%; transform: translateX(-50%); }
+#login-section [data-agent-id="gabriela"] { top: 42%; left: 75%; transform: translateX(-50%); }
+#login-section [data-agent-id="tiago"]    { top: 42%; left: 95%; transform: translateX(-50%); }
+
+#login-section [data-agent-id="sofia"]    { top: 65%; left: 15%; transform: translateX(-50%); }
+#login-section [data-agent-id="eduardo"]  { top: 65%; left: 37%; transform: translateX(-50%); }
+#login-section [data-agent-id="drgustavo"]{ top: 65%; left: 63%; transform: translateX(-50%); }
+#login-section [data-agent-id="helena"]   { top: 65%; left: 85%; transform: translateX(-50%); }
+
+#login-section [data-agent-id="carolina"] { top: 85%; left: 25%; transform: translateX(-50%); }
+#login-section [data-agent-id="daniel"]   { top: 85%; left: 50%; transform: translateX(-50%); }
+#login-section [data-agent-id="beatriz"]  { top: 85%; left: 75%; transform: translateX(-50%); }
+
+
+.login-box {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            background-color: #232C3B;
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border: 1px solid rgba(197, 167, 115, 0.2);
+            overflow: hidden;
+        }
+        .login-shield-logo, .login-title-logo, .login-subtitle, #login-form, .login-links {
+            position: relative;
+            z-index: 1;
+        }
+        .login-shield-logo { width: 80px; height: auto; margin-bottom: 1rem; }
+        .login-title-logo { width: 80%; max-width: 300px; height: auto; margin-bottom: 1rem; }
+        .login-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+        .input-group { margin-bottom: 1.5rem; text-align: left; position: relative; }
+        .input-group label {
+            display: block; margin-bottom: 0.5rem;
+            font-weight: 500; font-size: 0.8rem;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+        }
+        .input-group input {
+            width: 100%; padding: 1rem 1.2rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(197, 167, 115, 0.5);
+            border-radius: 50px;
+            color: white; font-size: 1rem;
+        }
+        .input-group input::placeholder { color: rgba(255, 255, 255, 0.4); }
+        .password-group input { padding-right: 3.5rem; }
+        .password-toggle-icon {
+            position: absolute; right: 1.2rem;
+            top: 55%; cursor: pointer;
+            font-size: 1.5rem;
+            color: rgba(197, 167, 115, 0.7);
+        }
+        .btn-login {
+            width: 100%; padding: 1rem; margin-top: 1rem;
+            background-color: var(--gold-primary);
+            color: #000b1b; border: none;
+            border-radius: 50px;
+            font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; transition: background-color 0.3s ease;
+        }
+        .btn-login:hover { background-color: #dfc395; }
+        .login-links { margin-top: 2rem; font-size: 0.9rem; }
+        .login-links a { color: var(--gold-primary); text-decoration: none; }
+        .login-links a:hover { text-decoration: underline; }
+        .signup-link { margin-top: 1rem; color: rgba(255, 255, 255, 0.7); }
+        #login-web-canvas {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        /* ============================================= */
+        /* == ESTRUTURA PRINCIPAL PÓS-LOGIN (APP SHELL) == */
+        /* ============================================= */
+        #app-shell { 
+            display: none; 
+            width: 100vw; 
+            height: 100vh; 
+            display: flex; 
+            background-color: var(--background-light);
+        }
+
+        .app-sidebar {
+            width: 280px;
+            height: 100%;
+            background-image: url('https://victorpaulovichbueno-gif.github.io/skin-barralateral-quantum/imagem' );
+            background-size: cover;
+            background-position: center;
+            border-right: 1px solid rgba(197, 167, 115, 0.2);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .app-sidebar-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .sidebar-shield-logo {
+            width: 60px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+        .sidebar-title-logo {
+            width: 70%;
+            max-width: 200px;
+            height: auto;
+        }
+        .app-nav { display: flex; flex-direction: column; gap: 0.5rem; }
+        .app-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .app-nav-link:hover {
+            background-color: rgba(197, 167, 115, 0.1);
+            color: white;
+        }
+        .app-nav-link.active {
+            background-color: var(--gold-primary);
+            color: black;
+        }
+        .app-nav-icon {
+            width: 20px;
+            height: auto;
+            filter: brightness(0) invert(1);
+            transition: filter 0.2s ease;
+        }
+        .app-nav-link:hover .app-nav-icon {
+            filter: none;
+        }
+        .app-nav-link.active .app-nav-icon {
+            filter: none;
+        }
+        .app-sidebar-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(197, 167, 115, 0.2);
+        }
+        #logout-btn:hover { background-color: #d9534f; color: white; }
+        #logout-btn svg { width: 20px; height: 20px; stroke: currentColor; }
+
+        .app-main-content { flex-grow: 1; height: 100%; overflow-y: auto; position: relative; }
+        .app-main-content > section { display: none; width: 100%; height: 100%; }
+        #agents-info-section { display: none; }
+
+/* --- ESTILOS PARA O NOVO BOTÃO GRÁFICO DA SIDEBAR --- */
+
+/* 1. O Link/Container (Nosso "Universo" de posicionamento) */
+.sidebar-graphic-button {
+    position: relative; /* Essencial para a sobreposição do texto */
+    display: block; /* Faz o link ocupar a largura disponível */
+    margin-top: 1rem; /* Espaço acima do botão */
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+/* 2. A Imagem do botão */
+.sidebar-graphic-button img {
+    width: 100%; /* Faz a imagem se ajustar à largura da sidebar */
+    height: auto;
+    display: block;
+}
+
+/* 3. O Texto "Mesa de Mentores" (que flutuará sobre a imagem) */
+.sidebar-button-text {
+    /* --- A MÁGICA DA SOBREPOSIÇÃO --- */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* --- ESTILO DO TEXTO --- */
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #000b1b; /* Cor Azul Quantum */
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    
+    /* Garante que o clique vá para o link */
+    pointer-events: none; 
+}
+
+/* Efeito de hover para dar feedback */
+.sidebar-graphic-button:hover {
+    transform: scale(1.03); /* Leve zoom para indicar interatividade */
+}
+
+
+
+/* ============================================= */
+/* == SEÇÃO "MESA DE MENTORES" (Layout de Grid) == */
+/* ============================================= */
+
+/* Layout principal da seção */
+#agents-info-section {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    height: 100%;
+    padding: 0;
+    background-image: url('https://victorpaulovichbueno-gif.github.io/sala-branca-quantum/sala'  );
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* Container da grade (esquerda) */
+.agents-grid-container {
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+}
+.agents-grid-header {
+    text-align: left;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+.agents-grid-header h1 {
+    font-family: var(--font-title);
+    font-size: 2.5rem;
+    color: var(--text-dark);
+}
+.agents-grid-header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+/* --- ESTILOS PARA O NOVO BOTÃO GRÁFICO NA BARRA LATERAL --- */
+
+/* --- ESTILO FINAL E ÚNICO PARA O BOTÃO DA BARRA LATERAL --- */
+
+.graphic-sidebar-button {
+    display: block;
+    margin-top: 1rem;
+    padding: 0; /* Remove o padding padrão dos links */
+    transition: transform 0.2s ease;
+}
+
+.graphic-sidebar-button img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.graphic-sidebar-button:hover {
+    transform: scale(1.03); /* Efeito sutil de crescimento */
+}
+
+
+/* --- ESTILOS DA GRADE (TRANSPLANTADOS DO LOGIN) --- */
+.agents-grid-formation {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('https://victorpaulovichbueno-gif.github.io/teia-quantum/foto' );
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(0.85); /* Reduz um pouco para caber melhor no espaço */
+}
+.agents-grid-formation .agent-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+.agents-grid-formation .agent-container:hover {
+    filter: drop-shadow(0 0 15px var(--gold-primary));
+    transform: scale(1.1);
+}
+/* NOVA REGRA: Estilo para o agente atualmente selecionado na grade */
+.agents-grid-formation .agent-container.active-agent {
+    filter: drop-shadow(0 0 20px var(--gold-primary));
+    transform: scale(1.05); /* Mantém um leve zoom para destaque */
+}
+
+.agents-grid-formation .agent-avatar {
+    width: 90px;
+    height: auto;
+    display: block;
+}
+.agents-grid-formation .central-agent .agent-avatar {
+    width: 130px;
+}
+.agents-grid-formation .agent-info {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000b1b;
+    color: var(--gold-primary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    white-space: nowrap;
+    border: 1px solid rgba(197, 167, 115, 0.3);
+}
+.agents-grid-formation .central-agent .agent-info {
+    background-color: var(--gold-primary);
+    color: #000b1b;
+    font-size: 0.8rem;
+}
+
+/* --- COORDENADAS DA GRADE (TRANSPLANTADAS DO LOGIN) --- */
+#agents-info-section [data-agent-id="lucas"]    { top: -5%; left: 25%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="fernando"] { top: -5%; left: 50%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="ricardo"]  { top: -5%; left: 75%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="julia"]    { top: 16%; left: 15%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="rafaela"]  { top: 16%; left: 37%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="leo"]      { top: 16%; left: 63%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="marcos"]   { top: 16%; left: 85%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="camila"]   { top: 40%; left: 5%;  transform: translateX(-50%); }
+#agents-info-section [data-agent-id="isabela"]  { top: 40%; left: 25%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="allex"]    { top: 38%; left: 50%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="gabriela"] { top: 40%; left: 75%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="tiago"]    { top: 40%; left: 95%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="sofia"]    { top: 65%; left: 15%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="eduardo"]  { top: 65%; left: 37%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="drgustavo"]{ top: 65%; left: 63%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="helena"]   { top: 65%; left: 85%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="carolina"] { top: 86%; left: 25%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="daniel"]   { top: 86%; left: 50%; transform: translateX(-50%); }
+#agents-info-section [data-agent-id="beatriz"]  { top: 86%; left: 75%; transform: translateX(-50%); }
+
+/* --- ESTILOS DA FICHA DO EXPERT (PAINEL DIREITO) --- */
+.expert-card-panel {
+    background-color: rgba(249, 250, 251, 0.95);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid var(--border-color);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.expert-card-content .panel-main-title {
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    color: var(--gold-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+.expert-card-content .panel-agent-identity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+/* --- ESTILOS CORRIGIDOS PARA O AVATAR NA FICHA --- */
+
+.panel-agent-avatar {
+    width: 100px;  /* Controla a largura da imagem */
+    height: auto;  /* A altura se ajusta para manter a proporção */
+    flex-shrink: 0; /* Impede que a imagem seja espremida */
+
+}
+/* --- ESTILO SIMPLIFICADO PARA O AVATAR NA FICHA --- */
+
+.panel-agent-avatar {
+    width: 100px;  /* Controla a largura da imagem */
+    height: auto;  /* A altura se ajusta para manter a proporção */
+    flex-shrink: 0; /* Impede que a imagem seja espremida */
+}
+.expert-card-content .panel-agent-identity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.expert-card-content .panel-header {
+    padding-bottom: 1rem;
+    margin-bottom: 2rem; /* Aumentei a margem para dar mais respiro */
+    border-bottom: 1px solid var(--border-color);
+}
+
+
+        /* ============================================= */
+        /* == TELA "CHATS" (Interface Imersiva)       == */
+        /* ============================================= */
+#chat-platform-section {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    
+    /* --- AJUSTE PRINCIPAL APLICADO AQUI --- */
+    background-image: url('https://victorpaulovichbueno-gif.github.io/sala-branca-quantum/sala' );
+    background-size: cover;
+    background-position: center;
+    /* A transição não é mais necessária, pois o fundo é fixo */
+}
+        .chat-side-panel {
+            width: 280px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative; /* CRUCIAL para posicionar o fundo */
+            overflow: hidden;   /* Garante que a imagem de fundo não vaze */
+        }
+
+/* REGRA CORRIGIDA PARA CENTRALIZAÇÃO VERTICAL */
+.chat-side-panel-bg {
+    position: absolute;
+    left: 0;
+    
+    /* --- AJUSTES DE CENTRALIZAÇÃO APLICADOS AQUI --- */
+    top: 50%;
+    transform: translateY(-50%);
+    
+    /* Seus ajustes de tamanho continuam aqui */
+    height: 35%;
+    width: 100px;
+    
+    z-index: 0;
+}
+
+        .chat-agent-display {
+            width: 180px;
+            height: 207px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            padding: 5px;
+            position: relative; /* Garante que o avatar fique sobre o fundo */
+            z-index: 1;
+        }
+/* REGRA MODIFICADA PARA O AVATAR DO AGENTE NO CHAT */
+#chat-active-agent-img {
+    width: 100%;
+    height: 100%;
+    
+    /* SUBSTITUA 'cover' POR 'contain' */
+    object-fit: contain; 
+    
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* REGRA MODIFICADA PARA SOBREPOSIÇÃO */
+.chat-main-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 3rem 2rem 0; 
+    max-height: 100vh;
+
+    /* --- NOVA LINHA ADICIONADA AQUI --- */
+    margin-left: -45px; /* <<-- CONTROLE AQUI O QUANTO VOCÊ QUER MOVER PARA A ESQUERDA */
+}
+
+
+        .chat-main-header {
+            text-align: left; /* Alinha o texto à esquerda */
+            padding-bottom: 1.5rem;
+            color: #000b1b; /* Cor do texto Azul Quantum */
+            text-shadow: none; /* Remove a sombra que era para texto branco */
+            flex-shrink: 0;
+        }
+        .chat-main-header h1 {
+            font-family: var(--font-title);
+            font-size: 2.5rem;
+        }
+        .chat-main-header h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #000b1b; /* Cor do subtítulo também em Azul Quantum */
+            opacity: 0.8; /* Leve transparência para o subtítulo */
+        }
+.chat-history-area {
+    flex-grow: 1;
+    
+    /* --- MUDANÇAS CRUCIAIS APLICADAS AQUI --- */
+    background-color: transparent; /* 1. Fundo totalmente transparente */
+    backdrop-filter: none;         /* 2. Remove o efeito de desfoque */
+    border: none;                  /* 3. Remove a borda */
+    
+    border-radius: 20px;
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+        .message-group {
+            display: flex;
+            gap: 1rem;
+            max-width: 75%;
+        }
+        .message-group.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .message-group.agent {
+            align-self: flex-start;
+        }
+/* REGRA GERAL PARA AVATARES */
+.message-avatar {
+    width: 40px;
+    height: 40px; /* Altura fixa para garantir o alinhamento */
+    align-self: flex-start;
+}
+
+/* NOVA REGRA PARA O AVATAR DO USUÁRIO */
+.user-avatar-initial {
+    background-image: url('https://victorpaulovichbueno-gif.github.io/icone-chat-quantum/imagem' );
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    /* Flexbox para centralizar a letra */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* NOVA REGRA PARA A LETRA INICIAL */
+.initial-letter {
+    font-family: var(--font-title); /* Usa uma fonte de destaque */
+    font-weight: 700;
+    font-size: 1.1rem; /* Tamanho da letra */
+    color: #000b1b; /* Cor Azul Quantum */
+}
+
+
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+.message-sender {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #000b1b; /* Mantém o Azul Quantum para legibilidade */
+    opacity: 0.7;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5); /* 4. Adiciona uma sombra para destacar do fundo */
+}
+
+
+/* REGRA MODIFICADA PARA O NOME DO USUÁRIO */
+.message-group.user .message-sender {
+    text-align: right;
+    color: #000b1b; /* <-- COR ALTERADA PARA O AZUL QUANTUM */
+    opacity: 1;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.3); /* Sombra clara para o texto escuro */
+}
+
+
+/* --- AJUSTE DE COR NOS BALÕES DE MENSAGEM --- */
+.message-bubble {
+    padding: 1rem 1.2rem;
+    border-radius: 15px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* 5. Adiciona uma sombra sutil aos balões */
+}
+
+/* Balão do Agente: fundo branco sólido e texto escuro */
+.message-group.agent .message-bubble {
+    background-color: #FFFFFF; /* 6. Fundo branco sólido */
+    color: #000b1b;
+    border-bottom-left-radius: 4px;
+}
+
+/* Balão do Usuário: continua igual, com alto contraste */
+.message-group.user .message-bubble {
+    background-color: var(--gold-primary);
+    color: #000b1b;
+    border-bottom-right-radius: 4px;
+}
+        .chat-input-footer {
+            padding-top: 1.5rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .chat-input-wrapper {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #chat-input-web {
+            width: 100%;
+            padding: 1.2rem 5rem 1.2rem 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(0, 11, 27, 0.8);
+            color: white;
+            font-size: 1rem;
+        }
+        #send-button-web {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+        #send-button-web img {
+            width: 40px;
+            height: auto;
+            transition: transform 0.2s ease;
+        }
+        #send-button-web:hover img {
+            transform: scale(1.1);
+        }
+/* --- ESTILOS FINAIS E CORRIGIDOS PARA A FICHA E NAVEGAÇÃO --- */
+
+/* O container do conteúdo (ocupa o espaço que sobrar) */
+.expert-card-content {
+    flex-grow: 1;
+    overflow-y: auto; /* Permite a rolagem apenas do conteúdo, se for grande */
+}
+
+
+
+
+.simple-cta-button:hover {
+    background-color: #dfc395;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+
+/* O link (<a>) que envolve a imagem do botão */
+.graphic-cta-button {
+    display: inline-block;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* A imagem do botão em si (COM OS NOVOS CONTROLES) */
+.graphic-cta-button img {
+    width: 250px;
+    height: auto;
+    display: block;
+
+    /* --- SUA "MESA DE CONTROLE" DE POSIÇÃO ESTÁ AQUI --- */
+    position: relative; /* 1. Ativa o modo de posicionamento */
+    left: 120px;          /* 2. <<-- MEXA AQUI PARA O AJUSTE HORIZONTAL */
+    top: 30px;           /* 3. (Opcional) Mexa aqui para o ajuste vertical */
+}
+.graphic-cta-title {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 1rem;
+    color: #000b1b;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    /* --- SUA "MESA DE CONTROLE" DE POSIÇÃO PARA O TEXTO ESTÁ AQUI --- */
+    position: relative; /* 1. Ativa o modo de posicionamento */
+    left: 0px;          /* 2. <<-- MEXA AQUI PARA O AJUSTE HORIZONTAL DO TEXTO */
+    top: 80px;           /* 3. (Opcional) Mexa aqui para o ajuste vertical do texto */
+}
+/* Efeito de hover para dar feedback ao usuário */
+.graphic-cta-button:hover {
+    transform: scale(1.05); /* Leve zoom */
+    filter: brightness(1.1); /* Leve brilho */
+}
+/* Estilo para o indicador de 'digitando' com o logo Quantum */
+.typing-indicator {
+    display: none; /* Começa escondido */
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.typing-indicator .agent-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.typing-indicator .quantum-loader {
+    width: 30px; /* Tamanho do seu logo */
+    height: 30px;
+    position: relative; /* Ativa o modo de posicionamento */
+        /* <<-- MEXA AQUI para o ajuste HORIZONTAL -->> */
+    /* Use valores positivos para mover para a direita, negativos para a esquerda */
+    left: 20px; 
+    /* <<-- MEXA AQUI para o ajuste VERTICAL -->> */
+    /* Use valores positivos para mover para baixo, negativos para cima */
+    top: 5px;     
+    animation: subtle-bounce 1.5s infinite ease-in-out;
+}
+
+/* Animação do pulo sutil */
+@keyframes subtle-bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px); /* Altura do pulo */
+    }
+}
+
+/* ============================================= */
+/* == ESTILIZAÇÃO DA BARRA DE ROLAGEM         == */
+/* ============================================= */
+
+/* Aplica o estilo a todas as barras de rolagem dentro do app */
+#app-shell ::-webkit-scrollbar {
+    width: 10px; /* Largura da barra de rolagem */
+}
+
+/* Estilo da trilha (o fundo da barra) */
+#app-shell ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1); /* Fundo sutil, quase transparente */
+    border-radius: 10px;
+}
+
+/* Estilo do polegar (a parte que se move) */
+#app-shell ::-webkit-scrollbar-thumb {
+    background-color: var(--gold-primary); /* A cor dourada da nossa paleta! */
+    border-radius: 10px;
+    border: 2px solid transparent; /* Cria um preenchimento interno */
+    background-clip: content-box; /* Faz com que a borda transparente funcione como preenchimento */
+}
+
+/* Efeito de hover no polegar (opcional, mas elegante) */
+#app-shell ::-webkit-scrollbar-thumb:hover {
+    background-color: #dfc395; /* Um dourado um pouco mais claro no hover */
+}
+
+/* --- ESTILOS FINAIS E APRIMORADOS PARA AS SETAS DE NAVEGAÇÃO --- */
+
+
+/* --- ESTILOS E CONTROLES PARA O BOTÃO GRÁFICO DA FICHA DO EXPERT --- */
+
+/* 1. O Container do Botão (Controla o alinhamento geral e o espaço superior) */
+.expert-card-cta-container {
+    /* --- CONTROLE A POSIÇÃO VERTICAL AQUI --- */
+    margin-top: 8rem; /* <<-- AUMENTE para descer, DIMINUA para subir */
+    
+    text-align: center; /* Centraliza o botão dentro do container */
+}
+
+/* 2. O Link (<a>) que envolve a imagem */
+.expert-card-cta-button {
+    display: inline-block; /* Necessário para que o link se comporte como um bloco */
+    transition: transform 0.3s ease;
+}
+
+/* 3. A Imagem do Botão (Sua "Mesa de Controle" principal) */
+.expert-card-cta-button img {
+    display: block;
+
+    /* --- CONTROLE O TAMANHO DA IMAGEM AQUI --- */
+    width: 280px; /* <<-- AJUSTE A LARGURA DA IMAGEM AQUI */
+    height: auto; /* Mantém a proporção automaticamente */
+
+    /* --- CONTROLE A POSIÇÃO HORIZONTAL AQUI --- */
+    position: relative; /* Ativa o modo de posicionamento */
+    left: 150px; /* <<-- USE VALORES POSITIVOS (direita) OU NEGATIVOS (esquerda) PARA AJUSTE FINO */
+}
+
+/* Efeito de hover para feedback visual */
+.expert-card-cta-button:hover {
+    transform: scale(1.03);
+}
+
+
+        /* ======================================================= */
+        /* == REGRAS PARA LAYOUT MOBILE                       == */
+        /* ======================================================= */
+        .mobile-header { display: none; }
+
+        @media (max-width: 768px) {
+            body { overflow: auto; }
+            #login-section { flex-direction: column; height: auto; min-height: 100vh; justify-content: flex-start; }
+            .left-panel { display: none; }
+            .right-panel { width: 100%; height: auto; padding: 1rem; }
+            .login-box { width: 100%; max-width: none; padding: 2rem 1rem; box-shadow: none; border-radius: 0; background-color: #000b1b; }
+            
+            #app-shell { flex-direction: column; }
+            .app-main-content { width: 100%; }
+            
+            .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: var(--gold-secondary); border-bottom: 1px solid var(--border-color); width: 100%; }
+            .mobile-header-title { font-family: var(--font-title); font-size: 1.5rem; color: var(--gold-primary); }
+            .mobile-menu-button { background: none; border: none; cursor: pointer; padding: 0.5rem; display: block; }
+            .mobile-menu-button svg { width: 24px; height: 24px; color: var(--text-dark); }
+            
+            .app-sidebar { position: fixed; top: 0; left: -100%; width: 280px; height: 100%; z-index: 200; transition: left 0.3s ease-in-out; }
+            .app-sidebar.mobile-visible { left: 0; }
+            .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 199; display: none; }
+            .overlay.visible { display: block; }
+            
+            #agents-info-section { grid-template-columns: 1fr; }
+            .agents-grid-container { display: none; }
+            .expert-card-panel { border-left: none; padding: 1.5rem; }
+            .expert-card-content .panel-agent-name h2 { font-size: 1.5rem; }
+            
+            #chat-platform-section { flex-direction: column; padding: 1rem; }
+            .chat-side-panel { display: none; }
+            .chat-main-container { padding: 1rem; }
+            .chat-main-header h1 { font-size: 1.8rem; }
+            .chat-main-header h2 { font-size: 1rem; }
+            .chat-history-area { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    
+    <section id="login-section">
+        <div class="left-panel">
+            <div class="static-formation">
+                <canvas id="login-web-canvas"></canvas>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="login-box">
+                <img src="https://victorpaulovichbueno-gif.github.io/logo-quantum/logo" alt="Quantum Minds Shield" class="login-shield-logo">
+                <img src="https://victorpaulovichbueno-gif.github.io/logo-quantum-nome/logo" alt="Quantum Minds Logo" class="login-title-logo">
+                
+                <p class="login-subtitle">Mantenha seus dados seguros</p>
+
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="email">CHAVE DE ACESSO</label>
+                        <input type="text" id="email" placeholder="nome@dominio.com" value="v">
+                    </div>
+                    <div class="input-group password-group">
+                        <label for="password">CÓDIGO SECRETO</label>
+                        <input type="password" id="password" placeholder="••••••••" value="1">
+                        <span class="password-toggle-icon" id="password-toggle"></span>
+                    </div>
+                    <button type="submit" class="btn-login">ACESSAR A SABEDORIA</button>
+                </form>
+
+                <div class="login-links">
+                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                    <p class="signup-link">Não tem conta? <a href="#">Cadastre-se!</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="app-shell">
+        <aside class="app-sidebar">
+            <div class="app-sidebar-header">
+                <img src="https://victorpaulovichbueno-gif.github.io/logo-quantum/logo" alt="Quantum Minds Shield" class="sidebar-shield-logo">
+                <img src="https://victorpaulovichbueno-gif.github.io/logo-quantum-nome/logo" alt="Quantum Minds Logo" class="sidebar-title-logo">
+            </div>
+<nav class="app-nav">
+    <!-- ================================================== -->
+    <!-- == BOTÃO GRÁFICO CORRIGIDO E FUNCIONAL          == -->
+    <!-- ================================================== -->
+    <a href="#" id="main-nav-button" class="graphic-sidebar-button">
+        <img src="https://victorpaulovichbueno-gif.github.io/barra-chat-quantum/foto2" alt="Iniciar Conversa">
+    </a>
+</nav>
+
+
+             <div class="app-sidebar-footer">
+                <a href="#" id="logout-btn" class="app-nav-link">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <span>Sair</span>
+                </a>
+            </div>
+        </aside>
+        
+        <main class="app-main-content">
+            <header class="mobile-header">
+                <h2 class="mobile-header-title">Quantum Minds</h2>
+                <button id="mobile-menu-btn" class="mobile-menu-button">
+                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg>
+                </button>
+            </header>
+
+            <section id="agents-info-section">
+                <div class="agents-grid-container">
+                    <div class="agents-grid-header">
+                        <h1>Conheça seus experts!</h1>
+                        <p>Clique sobre o agente que deseja conhecer e inicie a sua conversa.</p>
+                    </div>
+                    <div class="agents-grid-formation">
+                        <!-- A teia de agentes será inserida aqui pelo JavaScript -->
+                    </div>
+                </div>
+                <div class="expert-card-panel">
+                    <div class="expert-card-content">
+                        <!-- O conteúdo da ficha do expert será inserido aqui -->
+                    </div>
+                    <div class="expert-card-navigation">
+                        <button id="expert-prev-btn" class="nav-arrow">‹</button>
+
+                        <button id="expert-next-btn" class="nav-arrow">›</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="chat-platform-section">
+                <div class="chat-side-panel">
+                        <!-- NOVO ELEMENTO GRÁFICO ADICIONADO AQUI -->
+                    <img src="https://victorpaulovichbueno-gif.github.io/semicirculo-quantum/foto.png" alt="" class="chat-side-panel-bg">
+
+                    <div class="chat-agent-display">
+                        <img src="" alt="Agente Ativo" id="chat-active-agent-img">
+                    </div>
+                </div>
+                <div class="chat-main-container">
+                    <header class="chat-main-header">
+                        <h1 id="chat-header-name"></h1>
+                        <h2 id="chat-header-title"></h2>
+                    </header>
+<div class="chat-history-area" id="chat-history-web">
+    <!-- As mensagens serão inseridas aqui pelo JavaScript -->
+
+    <!-- NOVO: Indicador de 'digitando' com o logo Quantum -->
+    <div class="typing-indicator" id="typing-indicator">
+        <img src="" class="message-avatar" id="typing-agent-icon">
+        <div class="message-content">
+             <img src="https://victorpaulovichbueno-gif.github.io/logo-quantum-selo/logo" alt="Digitando..." class="quantum-loader">
+        </div>
+    </div>
+</div>
+
+                    <footer class="chat-input-footer">
+                        <form class="chat-input-wrapper" id="chat-form-web">
+                            <input type="text" id="chat-input-web" placeholder="Peça ao expert" autocomplete="off">
+                            <button type="submit" id="send-button-web">
+                                <img src="https://victorpaulovichbueno-gif.github.io/logo-quantum-selo/logo" alt="Enviar">
+                            </button>
+                        </form>
+                        <p class="disclaimer">O conselho possui alto nível de treinamento mas pode cometer erros. Por isso, cheque as respostas.</p>
+                    </footer>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // =======================================================
+        // == DADOS E BANCO DE DADOS SIMULADO                   ==
+        // =======================================================
+// VERSÃO FINAL E ORGANIZADA DO BANCO DE DADOS DE AGENTES
+// =======================================================
+// == DADOS E BANCO DE DADOS SIMULADO                   ==
+// =======================================================
+const agents = {
+    'allex': { name: 'Allex', title: 'MasterMind', img: 'https://victorpaulovichbueno-gif.github.io/agente-1/unnamed.png', experience: 'Estratégia de negócios, liderança, desenvolvimento de produtos e visão de mercado. Allex é o ponto central para decisões de alto nível e direção da empresa.', use_cases: 'Peça para ele analisar um novo plano de negócios, dar feedback sobre a estratégia de expansão ou ajudar a definir metas trimestrais para a empresa.' },
+    'lucas': { name: 'Lucas', title: 'Comunicação e Relacionamentos', img: 'https://victorpaulovichbueno-gif.github.io/A1/foto', experience: 'Especialista em comunicação interpessoal, resolução de conflitos e construção de narrativas. Ajuda a alinhar equipes e a melhorar a comunicação externa.', use_cases: 'Use-o para mediar discussões difíceis, preparar um discurso importante ou criar um plano de comunicação para um novo projeto.' },
+    'fernando': { name: 'Fernando', title: 'Comercial e Vendas', img: 'https://victorpaulovichbueno-gif.github.io/A2/foto', experience: 'Mestre em técnicas de negociação, funis de venda e estratégias de crescimento de receita. Focado em resultados e performance comercial.', use_cases: 'Consulte-o para refinar seu pitch de vendas, estruturar a comissão do seu time ou identificar novos canais de prospecção.' },
+    'ricardo': { name: 'Ricardo', title: 'Consultor de Carreira', img: 'https://victorpaulovichbueno-gif.github.io/A3/foto', experience: 'Orientador para desenvolvimento profissional, transição de carreira e planejamento de longo prazo. Ajuda a identificar pontos fortes e oportunidades de crescimento.', use_cases: 'Peça ajuda para atualizar seu currículo, preparar-se para uma entrevista ou explorar novas possibilidades de carreira.' },
+    'julia': { name: 'Julia', title: 'Artes e Design', img: 'https://victorpaulovichbueno-gif.github.io/A4/foto', experience: 'Visionária criativa para identidade visual, branding e experiência do usuário. Transforma ideias em conceitos visuais impactantes e coesos.', use_cases: 'Solicite a criação de um logotipo, a definição da paleta de cores para uma marca ou sugestões de layout para um website.' },
+    'rafaela': { name: 'Rafaela', title: 'Marketing Estratégico', img: 'https://victorpaulovichbueno-gif.github.io/agente-2/unnamed.png', experience: 'Arquiteta de campanhas de marketing digital, SEO, marketing de conteúdo e análise de métricas. Focada em posicionamento de marca e geração de leads.', use_cases: 'Peça para ela criar um plano de marketing de 3 meses, sugerir estratégias de conteúdo para redes sociais ou analisar a performance de suas campanhas.' },
+    'leo': { name: 'Leo', title: 'Tecnologia e I.A.', img: 'https://victorpaulovichbueno-gif.github.io/A6/foto', experience: 'Inovador focado em arquitetura de software, implementação de I.A. e soluções tecnológicas escaláveis. Traduz necessidades de negócio em especificações técnicas.', use_cases: 'Consulte-o para decidir a melhor stack de tecnologia para um novo projeto, entender como aplicar I.A. no seu negócio ou resolver um problema complexo de arquitetura.' },
+    'marcos': { name: 'Marcos', title: 'Contabilidade', img: 'https://victorpaulovichbueno-gif.github.io/A7/foto', experience: 'Especialista em saúde financeira, planejamento tributário e conformidade fiscal. Garante que os números estejam sempre organizados e otimizados.', use_cases: 'Peça ajuda para entender seu balanço, planejar a declaração de impostos ou analisar a viabilidade financeira de um investimento.' },
+    'camila': { name: 'Camila', title: 'Psicóloga', img: 'https://victorpaulovichbueno-gif.github.io/A8/foto', experience: 'Apoio para o bem-estar mental, gestão de estresse e desenvolvimento da inteligência emocional. Oferece um espaço seguro para reflexão e crescimento pessoal.', use_cases: 'Converse com ela para lidar com ansiedade, melhorar o foco no trabalho ou desenvolver estratégias para um melhor equilíbrio entre vida pessoal e profissional.' },
+    'isabela': { name: 'Isabela', title: 'Espiritualidade', img: 'https://victorpaulovichbueno-gif.github.io/A9/foto', experience: 'Guia para a jornada interior, meditação, mindfulness e busca por propósito. Ajuda a conectar-se com seus valores e a encontrar mais significado no dia a dia.', use_cases: 'Procure-a para aprender técnicas de meditação, discutir questões sobre propósito de vida ou encontrar maneiras de ser mais presente e consciente.' },
+    'gabriela': { name: 'Gabriela', title: 'Produtividade', img: 'https://victorpaulovichbueno-gif.github.io/A11/foto', experience: 'Otimizadora de tempo, foco e organização. Especialista em métodos como GTD, Pomodoro e criação de sistemas para alta performance.', use_cases: 'Peça para ela ajudar a organizar sua lista de tarefas, criar um plano de estudos ou montar uma rotina semanal mais eficiente.' },
+    'tiago': { name: 'Tiago', title: 'Preparador Físico', img: 'https://victorpaulovichbueno-gif.github.io/agente-7/unnamed.png', experience: 'Especialista em saúde corporal, performance atlética e bem-estar físico. Cria planos de treino e orienta sobre a importância do movimento para a saúde mental.', use_cases: 'Consulte-o para montar um plano de treino para iniciantes, obter dicas de como manter a consistência ou entender como o exercício pode combater o estresse.' },
+    'sofia': { name: 'Sofia', title: 'Nutrição Funcional', img: 'https://victorpaulovichbueno-gif.github.io/A13/foto', experience: 'Focada em alimentação como base para a saúde integral. Entende como os nutrientes afetam a energia, o humor e a performance cognitiva.', use_cases: 'Peça sugestões de cardápio para uma semana mais energética, dicas de alimentos para melhorar o foco ou como adaptar sua dieta para um objetivo específico.' },
+    'eduardo': { name: 'Eduardo', title: 'Dinheiro e Finanças', img: 'https://victorpaulovichbueno-gif.github.io/agente-3/unnamed.png', experience: 'Estrategista para investimentos, planejamento financeiro pessoal e criação de riqueza. Traduz o complexo mundo das finanças em passos práticos.', use_cases: 'Consulte-o para criar um plano de aposentadoria, entender diferentes tipos de investimento ou organizar seu orçamento mensal.' },
+    'drgustavo': { name: 'Dr. Gustavo', title: 'Conselho Jurídico', img: 'https://victorpaulovichbueno-gif.github.io/agente-8/unnamaed.png', experience: 'Navegador das complexidades legais em áreas como contratos, propriedade intelectual e direito empresarial. Focado em prevenção de riscos.', use_cases: 'Peça para ele revisar uma cláusula de contrato, explicar as implicações legais de uma decisão de negócio ou orientar sobre o registro de uma marca.' },
+    'helena': { name: 'Helena', title: 'Inteligência Emocional', img: 'https://victorpaulovichbueno-gif.github.io/A16/foto', experience: 'Especialista no desenvolvimento da autoconsciência, autogestão, empatia e habilidades sociais. Ajuda a transformar emoções em aliadas.', use_cases: 'Converse com ela para aprender a lidar com feedback negativo, melhorar seus relacionamentos interpessoais ou aumentar sua autoconfiança.' },
+    'carolina': { name: 'Carolina', title: 'Recursos Humanos', img: 'https://victorpaulovichbueno-gif.github.io/agente-5/unnamed.png', experience: 'Especialista em cultura organizacional, gestão de talentos, recrutamento e desenvolvimento de equipes. Focada em criar ambientes de trabalho positivos.', use_cases: 'Peça ajuda para estruturar um processo seletivo, criar um plano de desenvolvimento para um funcionário ou resolver um conflito dentro da equipe.' },
+    'daniel': { name: 'Daniel', title: 'Desenvolvimento', img: 'https://victorpaulovichbueno-gif.github.io/A18/foto', experience: 'Focado no crescimento pessoal e profissional contínuo. Ajuda a construir hábitos, aprender novas habilidades e sair da zona de conforto.', use_cases: 'Procure-o para criar um plano de aprendizado para uma nova habilidade, definir metas de desenvolvimento pessoal ou encontrar motivação para seus projetos.' },
+    'beatriz': { name: 'Beatriz', title: 'Sucesso do Cliente', img: 'https://victorpaulovichbueno-gif.github.io/agente-6/unnamed.png', experience: 'Garante a melhor experiência e satisfação do cliente. Especialista em onboarding, retenção e coleta de feedback para melhoria contínua do produto.', use_cases: 'Consulte-a para criar um fluxo de onboarding para novos usuários, desenvolver uma pesquisa de satisfação ou pensar em estratégias para reduzir o cancelamento (churn  ).' }
+};
+
+const agentIds = Object.keys(agents);
+const chatHistories = {}; // Inicializa vazio para ser populado dinamicamente
+agentIds.forEach(id => {
+    // Cria um histórico inicial para cada agente, se não existir
+    chatHistories[id] = [{ role: 'assistant', content: `(Mensagem de boas-vindas para ${agents[id].name}) Olá! Como posso te ajudar hoje?` }];
+});
+
+let activeChatAgentId = 'allex';
+let currentExpertIndex = 0;
+const expertAgentIds = Object.keys(agents);
+let loggedInUserEmail = '';
+
+// =======================================================
+// == SELEÇÃO DOS ELEMENTOS DO DOM (HTML)             ==
+// =======================================================
+const loginSection = document.getElementById('login-section');
+const appShell = document.getElementById('app-shell');
+const loginForm = document.getElementById('login-form');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const contentSections = document.querySelectorAll('.app-main-content > section');
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const sidebar = document.querySelector('.app-sidebar');
+const overlay = document.querySelector('.overlay');
+const logoutBtn = document.getElementById('logout-btn');
+const loginFormation = document.querySelector('#login-section .static-formation');
+const agentGridFormation = document.querySelector('.agents-grid-formation');
+const expertCardContent = document.querySelector('.expert-card-content');
+const expertPrevBtn = document.getElementById('expert-prev-btn');
+const expertNextBtn = document.getElementById('expert-next-btn');
+const chatSection = document.getElementById('chat-platform-section');
+const chatActiveAgentImg = document.getElementById('chat-active-agent-img');
+const chatHeaderName = document.getElementById('chat-header-name');
+const chatHeaderTitle = document.getElementById('chat-header-title');
+const chatHistoryWeb = document.getElementById('chat-history-web');
+const chatFormWeb = document.getElementById('chat-form-web');
+const chatInputWeb = document.getElementById('chat-input-web');
+const mainNavButton = document.getElementById('main-nav-button');
+
+// =======================================================
+// == FUNÇÕES PRINCIPAIS E EVENTOS                      ==
+// =======================================================
+document.addEventListener('DOMContentLoaded', () => {
+    renderAgentFormation(loginFormation, true);
+    // A função de desenhar linhas pode ser pesada, vamos otimizar
+    // setTimeout(() => drawLines('login-web-canvas', '#login-section .static-formation'), 100);
+});
+
+loginForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (emailInput.value === 'v' && passwordInput.value === '1') {
+        loggedInUserEmail = emailInput.value;
+        loginSection.style.display = 'none';
+        appShell.style.display = 'flex';
+        if (window.innerWidth <= 768) {
+            document.querySelector('.mobile-header').style.display = 'flex';
+        }
+        showSection('agents-info-section');
+    } else {
+        alert('Chave de acesso ou código secreto incorretos!');
+    }
+});
+
+function showSection(targetId) {
+    contentSections.forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+        const displayStyle = (targetId === 'agents-info-section') ? 'grid' : 'flex';
+        targetSection.style.display = displayStyle;
+    }
+
+    if (targetId === 'agents-info-section') {
+        renderAgentWeb();
+    } else if (targetId === 'chat-platform-section') {
+        showConversation();
+    }
+}
+
+function renderAgentWeb() {
+    if (!agentGridFormation) return;
+    agentGridFormation.innerHTML = ''; 
+
+    expertAgentIds.forEach((agentId, index) => {
+        const agent = agents[agentId];
+        if (!agent) return;
+        const agentDiv = document.createElement('div');
+        agentDiv.classList.add('agent-container');
+        agentDiv.dataset.agentId = agentId;
+        
+        if (agentId === 'allex') {
+            agentDiv.classList.add('central-agent');
+        }
+
+        agentDiv.innerHTML = `<img src="${agent.img}" alt="${agent.name}" class="agent-avatar"><div class="agent-info">${agent.title}</div>`;
+        
+        agentDiv.addEventListener('click', () => {
+            currentExpertIndex = index;
+            showExpertDetails();
+        });
+        
+        agentGridFormation.appendChild(agentDiv);
+    });
+
+    showExpertDetails();
+}
+
+function showExpertDetails() {
+    const contentContainer = document.querySelector('.expert-card-content');
+    const navigationContainer = document.querySelector('.expert-card-navigation');
+    
+    if (!contentContainer || !navigationContainer) return;
+
+    contentContainer.innerHTML = '';
+    navigationContainer.innerHTML = ''; 
+
+    const agentId = expertAgentIds[currentExpertIndex];
+    const agent = agents[agentId];
+    if (!agent) return;
+
+    contentContainer.innerHTML = `
+        <div class="panel-header">
+            <h4 class="panel-main-title">Ficha do Expert</h4>
+            <div class="panel-agent-identity">
+                <img src="${agent.img}" alt="${agent.name}" class="panel-agent-avatar">
+                <div class="panel-agent-name">
+                    <h2>${agent.name}</h2>
+                    <h3>${agent.title}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <strong>Área de Experiência:</strong>
+            <p>${agent.experience}</p>
+            <strong>Exemplos de uso:</strong>
+            <p>${agent.use_cases}</p>
+            <div class="expert-card-cta-container">
+                <a href="#" class="expert-card-cta-button" data-agent-id="${agentId}">
+                    <img src="https://victorpaulovichbueno-gif.github.io/barra-acessar-chat-quantum/foto.png" alt="Acessar Chat">
+                </a>
+            </div>
+        </div>
+    `;
+
+    const accessChatBtn = contentContainer.querySelector('.expert-card-cta-button' );
+    if (accessChatBtn) {
+        accessChatBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            activeChatAgentId = e.currentTarget.dataset.agentId;
+            showSection('chat-platform-section');
+        });
+    }
+
+    const allGridAgents = agentGridFormation.querySelectorAll('.agent-container');
+    allGridAgents.forEach(agentDiv => agentDiv.classList.remove('active-agent'));
+    const activeGridAgent = agentGridFormation.querySelector(`[data-agent-id="${agentId}"]`);
+    if (activeGridAgent) {
+        activeGridAgent.classList.add('active-agent');
+    }
+}
+
+function showConversation() {
+    const agent = agents[activeChatAgentId];
+    if (!agent) return;
+
+    chatHeaderName.textContent = agent.name;
+    chatHeaderTitle.textContent = agent.title;
+    chatActiveAgentImg.src = agent.img;
+
+    renderActiveChatWeb();
+}
+
+function renderActiveChatWeb() {
+    const history = chatHistories[activeChatAgentId] || [];
+    // Limpa o chat, mas mantém o indicador de "digitando"
+    chatHistoryWeb.innerHTML = `
+        <div class="typing-indicator" id="typing-indicator">
+            <img src="" class="message-avatar" id="typing-agent-icon">
+            <div class="message-content">
+                 <img src="https://victorpaulovichbueno-gif.github.io/logo-quantum-selo/logo" alt="Digitando..." class="quantum-loader">
+            </div>
+        </div>
+    `;
+    history.forEach(message => addMessageToDom(message.content, message.role, chatHistoryWeb ));
+    chatHistoryWeb.scrollTop = chatHistoryWeb.scrollHeight;
+}
+
+function addMessageToDom(text, role, container) {
+    const agent = agents[activeChatAgentId];
+    if (!agent) return;
+
+    const messageGroup = document.createElement('div');
+    const senderClass = (role === 'user') ? 'user' : 'agent';
+    messageGroup.classList.add('message-group', senderClass);
+    
+    let senderName = '';
+    let avatarHtml = '';
+
+    if (senderClass === 'agent') {
+        senderName = `${agent.name} - ${agent.title}`;
+        avatarHtml = `<img src="${agent.img}" alt="${agent.name}" class="message-avatar">`;
+    } else {
+        senderName = 'Você';
+        const userInitial = loggedInUserEmail.charAt(0).toUpperCase() || 'V';
+        avatarHtml = `
+            <div class="message-avatar user-avatar-initial">
+                <span class="initial-letter">${userInitial}</span>
+            </div>
+        `;
+    }
+
+    messageGroup.innerHTML = `
+        ${avatarHtml}
+        <div class="message-content">
+            <p class="message-sender">${senderName}</p>
+            <div class="message-bubble">${text}</div>
+        </div>
+    `;
+    
+    const typingIndicator = document.getElementById('typing-indicator');
+    container.insertBefore(messageGroup, typingIndicator);
+    container.scrollTop = container.scrollHeight;
+}
+
+chatFormWeb.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const userMessageText = chatInputWeb.value.trim();
+    if (userMessageText === '') return;
+
+    if (!chatHistories[activeChatAgentId]) {
+        chatHistories[activeChatAgentId] = [];
+    }
+
+    const userMessage = { role: 'user', content: userMessageText };
+    chatHistories[activeChatAgentId].push(userMessage);
+    addMessageToDom(userMessageText, 'user', chatHistoryWeb);
+    chatInputWeb.value = '';
+    chatHistoryWeb.scrollTop = chatHistoryWeb.scrollHeight;
+
+    const typingIndicator = document.getElementById('typing-indicator');
+    const typingAgentIcon = document.getElementById('typing-agent-icon');
+    const agent = agents[activeChatAgentId];
+
+    typingAgentIcon.src = agent.img;
+    typingIndicator.style.display = 'flex';
+    chatHistoryWeb.scrollTop = chatHistoryWeb.scrollHeight;
+
+    try {
+        const aiResponseText = await getOpenAIResponse(activeChatAgentId, chatHistories[activeChatAgentId]);
+        
+        typingIndicator.style.display = 'none';
+
+        const aiMessage = { role: 'assistant', content: aiResponseText };
+        chatHistories[activeChatAgentId].push(aiMessage);
+        addMessageToDom(aiResponseText, 'assistant', chatHistoryWeb);
+
+    } catch (error) {
+        console.error("Erro na chamada da IA:", error);
+        typingIndicator.style.display = 'none';
+        addMessageToDom("Desculpe, não consegui me conectar ao meu núcleo de processamento. Por favor, verifique se o servidor está ativo e tente novamente.", 'assistant', chatHistoryWeb);
+    }
+});
+
+async function getOpenAIResponse(agentId, history) {
+    const apiUrl = 'http://127.0.0.1:5001/ask';
+    const requestData = {
+        agent_id: agentId,
+        history: history
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData ),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Erro do servidor:', errorData);
+            return `Desculpe, ocorreu um erro no servidor: ${errorData.error || response.statusText}`;
+        }
+
+        const responseData = await response.json();
+        return responseData.response;
+
+    } catch (error) {
+        console.error('Erro de conexão:', error);
+        return "Não foi possível conectar ao servidor da IA. Verifique se o `app.py` está rodando no terminal.";
+    }
+}
+
+function renderAgentFormation(container, isLogin) {
+    if (!container) return;
+    container.innerHTML = '';
+    
+    const allAgentIds = Object.keys(agents);
+
+    allAgentIds.forEach(agentId => {
+        const agent = agents[agentId];
+        if (!agent) return;
+        const agentDiv = document.createElement('div');
+        agentDiv.classList.add('agent-container');
+        agentDiv.dataset.agentId = agentId;
+        
+        if (agentId === 'allex') {
+            agentDiv.classList.add('central-agent');
+        }
+        
+        const infoContent = isLogin ? agent.title : `<p class="agent-name">${agent.name}</p><p class="agent-title">${agent.title}</p>`;
+        agentDiv.innerHTML = `<img src="${agent.img}" alt="${agent.name}" class="agent-avatar"><div class="agent-info">${infoContent}</div>`;
+        
+        container.appendChild(agentDiv);
+    });
+}
+
+// =======================================================
+// == LÓGICA DO MENU MOBILE, LOGOUT E OUTROS EVENTOS  ==
+// =======================================================
+function toggleMobileMenu() {
+    sidebar.classList.toggle('mobile-visible');
+    overlay.classList.toggle('visible');
+}
+
+if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+if (overlay) overlay.addEventListener('click', toggleMobileMenu);
+
+if (sidebar) {
+    sidebar.addEventListener('click', function(event) {
+        if (event.target.closest('.app-nav-link') || event.target.closest('.graphic-sidebar-button')) {
+            if (sidebar.classList.contains('mobile-visible')) {
+                toggleMobileMenu();
+            }
+        }
+    });
+}
+
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', function(event) {
+        event.preventDefault(); 
+        window.location.reload();
+    });
+}
+
+const passwordToggle = document.getElementById('password-toggle');
+if (passwordToggle) {
+    passwordToggle.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+    });
+}
+
+if (mainNavButton) {
+    mainNavButton.addEventListener('click', function(event) {
+        event.preventDefault(); 
+        showSection('agents-info-section');
+    });
+}
+
+
+    </script>
+</body>
+</html>
