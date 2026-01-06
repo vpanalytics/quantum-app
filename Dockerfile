@@ -1,30 +1,20 @@
-# Não copiar estes arquivos para o Docker
+# Use a imagem oficial do Python 3.11
+FROM python:3.11-slim
 
-# Credenciais (IMPORTANTE!)
-firebase-credentials.json
-.env
+# Define o diretório de trabalho dentro do container
+WORKDIR /app
 
-# Python
-__pycache__/
-*.py[cod]
-*.so
-.Python
-*.pyc
-venv/
-env/
-ENV/
+# Copia o arquivo de dependências para o container
+COPY requirements.txt .
 
-# Git
-.git
-.gitignore
+# Instala as dependências do Python
+RUN pip install --no-cache-dir -r requirements.txt
 
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
+# Copia todo o código da aplicação para o container
+COPY . .
 
-# Outros
-README.md
-.DS_Store
-*.log
+# Expõe a porta que o Flask usará
+EXPOSE 5000
+
+# Comando para inicializar o banco de dados e rodar a aplicação
+CMD ["sh", "-c", "flask create-db && gunicorn --bind 0.0.0.0:$PORT app:app"]

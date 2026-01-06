@@ -1,7 +1,26 @@
+# Ambientes virtuais
 venv/
-.venv/
+env/
+.venv
+ENV/
+
+# Arquivos Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+
+# Banco de dados local
+*.db
+instance/
+
+# Variáveis de ambiente
 .env
-.env.txt
-*.env
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
