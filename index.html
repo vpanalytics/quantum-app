@@ -1606,7 +1606,7 @@ chatFormWeb.addEventListener('submit', async function(event) {
 
 
 async function getOpenAIResponse(agentId, history) {
-    const apiUrl = 'https://quantum-app.onrender.com/ask';
+    const apiUrl = 'https://quantum-minds.onrender.com/conversations/{{userId}}/{{agentId}}/send';
     const requestData = {
         agent_id: agentId,
         history: history
