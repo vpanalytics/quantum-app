@@ -6,16 +6,24 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai import OpenAI
-from dotenv import load_dotenv # <-- PASSO 1: Importar a biblioteca dotenv
+from dotenv import load_dotenv
 from flask import send_file
 
-load_dotenv() # <-- PASSO 2: Carregar as variáveis do arquivo .env
+# ===== IMPORTS SUPABASE =====
+from supabase import create_client, Client
+
+load_dotenv()
+
+# ===== INICIALIZAR SUPABASE =====
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_SECRET_KEY")
+supabase: Client = create_client(supabase_url, supabase_key)
 
 # --- Configuração do Cliente OpenAI ---
-# O cliente agora é inicializado lendo a chave do ambiente, não mais do código.
 client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY") # <-- PASSO 3: Usar os.getenv para ler a chave
+    api_key=os.getenv("OPENAI_API_KEY")
 )
+
 
 # --- Configuração do Servidor Flask ---
 app = Flask(__name__)
