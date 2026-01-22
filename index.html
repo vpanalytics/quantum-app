@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         /* ============================================= */
@@ -597,9 +599,7 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding: 2rem 3rem 2rem 0; 
-    max-height: 100vh;
-
+    padding: 2rem 3rem 2rem 0;
     /* --- NOVA LINHA ADICIONADA AQUI --- */
     margin-left: -45px; /* <<-- CONTROLE AQUI O QUANTO VOCÊ QUER MOVER PARA A ESQUERDA */
 }
@@ -624,19 +624,17 @@
         }
 .chat-history-area {
     flex-grow: 1;
-    
-    /* --- MUDANÇAS CRUCIAIS APLICADAS AQUI --- */
-    background-color: transparent; /* 1. Fundo totalmente transparente */
-    backdrop-filter: none;         /* 2. Remove o efeito de desfoque */
-    border: none;                  /* 3. Remove a borda */
-    
+    background-color: transparent;
+    backdrop-filter: none;
+    border: none;
     border-radius: 20px;
-    padding: 2rem;
+    padding: 0rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.5rem;
 }
+
         .message-group {
             display: flex;
             gap: 1rem;
@@ -678,12 +676,14 @@
 }
 
 
-        .message-content {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            width: 100%;
-        }
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: auto;
+    max-width: 600px;
+}
+
 .message-sender {
     font-weight: 600;
     font-size: 0.9rem;
@@ -702,13 +702,43 @@
 }
 
 
-/* --- AJUSTE DE COR NOS BALÕES DE MENSAGEM --- */
-.message-bubble {
-    padding: 1rem 1.2rem;
+.message-bubble{
+    padding: 0 !important;
     border-radius: 15px;
     font-size: 0.95rem;
     line-height: 1.6;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* 5. Adiciona uma sombra sutil aos balões */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: auto;
+    max-height: none;
+}
+
+
+
+/* Botão de copiar mensagem */
+.message-copy-btn {
+    display: block; /* Sempre visível */
+    position: absolute;
+    bottom: var(--copy-btn-distance, -10px); /* Variável para ajustar distância */
+    left: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: var(--copy-btn-size, 30px);
+    height: var(--copy-btn-size, 30px);
+}
+
+.message-copy-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.message-group.agent {
+    position: relative;
 }
 
 /* Balão do Agente: fundo branco sólido e texto escuro */
@@ -723,7 +753,20 @@
     background-color: var(--gold-primary);
     color: #000b1b;
     border-bottom-right-radius: 4px;
+    padding: 0.3rem 0.8rem !important;
 }
+
+/* Balão do usuário com padding pequeno */
+.user-bubble {
+    padding: 0.3rem 0.8rem !important;
+}
+
+/* Balão do agente com padding normal */
+.agent-bubble {
+    padding: 1rem 1.2rem !important;
+}
+
+
         .chat-input-footer {
             padding-top: 1.5rem;
             text-align: center;
@@ -736,7 +779,7 @@
         }
         #chat-input-web {
             width: 100%;
-            padding: 1.2rem 5rem 1.2rem 2rem;
+            padding: 2rem 5rem 2rem 2rem;
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             background-color: rgba(0, 11, 27, 0.8);
@@ -919,6 +962,16 @@
     transform: scale(1.03);
 }
 
+.message.assistant {
+    white-space: pre-wrap;        /* Preserva quebras de linha */
+    line-height: 1.8;             /* Espaçamento entre linhas */
+    word-wrap: break-word;        /* Quebra palavras longas */
+}
+
+.message.assistant p {
+    margin-bottom: 15px;          /* Espaço entre parágrafos */
+    line-height: 1.6;             /* Altura da linha */
+}
 
         /* ======================================================= */
         /* == REGRAS PARA LAYOUT MOBILE                       == */
@@ -978,15 +1031,16 @@
                 <form id="login-form">
                     <div class="input-group">
                         <label for="email">CHAVE DE ACESSO</label>
-                        <input type="text" id="email" placeholder="nome@dominio.com" value="v">
+                        <input type="text" id="email" placeholder="nome@dominio.com" value="">
                     </div>
                     <div class="input-group password-group">
                         <label for="password">CÓDIGO SECRETO</label>
-                        <input type="password" id="password" placeholder="••••••••" value="1">
+                        <input type="password" id="password" placeholder="••••••••" value="">
                         <span class="password-toggle-icon" id="password-toggle"></span>
                     </div>
                     <button type="submit" class="btn-login">ACESSAR A SABEDORIA</button>
                 </form>
+
 
                 <div class="login-links">
                     <a href="#" class="forgot-password">Esqueceu a senha?</a>
@@ -1079,9 +1133,9 @@
 
                     <footer class="chat-input-footer">
                         <form class="chat-input-wrapper" id="chat-form-web">
-                            <input type="text" id="chat-input-web" placeholder="Peça ao expert" autocomplete="off">
+                            <textarea id="chat-input-web" placeholder="Peça ao expert" autocomplete="off" rows="1"></textarea>
                             <button type="submit" id="send-button-web">
-                                <img src="https://victorpaulovichbueno-gif.github.io/logo-quantum-selo/logo" alt="Enviar">
+                                <img src="https://victorpaulovichbueno-gif.github.io/icone-send-mensage-quantum/foto2" alt="Enviar">
                             </button>
                         </form>
                         <p class="disclaimer">O conselho possui alto nível de treinamento mas pode cometer erros. Por isso, cheque as respostas.</p>
@@ -1092,6 +1146,23 @@
     </div>
 
     <script>
+
+// ===== INICIALIZAR SUPABASE =====
+const SUPABASE_URL = 'https://zfeovauqykucbmisgjbd.supabase.co';
+
+const SUPABASE_ANON_KEY = 'sb_publishable_tL2GqnJct0SWjpXoJqLjow_UlqPrn3m';
+
+// Extrair createClient do window.supabase
+const { createClient } = window.supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY );
+
+// ===== VARIÁVEIS GLOBAIS =====
+let currentUser = null;
+let currentConversation = null;
+let currentAgent = null;
+let currentConversationId = null;
+let userConversations = {};
+
         // =======================================================
         // == DADOS E BANCO DE DADOS SIMULADO                   ==
         // =======================================================
@@ -1160,31 +1231,116 @@ const chatFormWeb = document.getElementById('chat-form-web');
 const chatInputWeb = document.getElementById('chat-input-web');
 const mainNavButton = document.getElementById('main-nav-button');
 
+// ===== CONFIGURAÇÃO DO ÍCONE DE COPIAR =====
+// Ajuste o tamanho do ícone de copiar (em pixels)
+const COPY_BUTTON_SIZE = '20px'; // Mude para: '40px', '50px', etc
+
+// Ajuste a distância do ícone em relação ao boxe (em pixels)
+// Use valores negativos para aproximar (-40px = afastado, -10px = próximo, 0px = colado)
+const COPY_BUTTON_DISTANCE = '-30px'; // Mude para: '-20px', '-10px', '0px', etc
+
+// Aplicar as configurações globalmente
+document.documentElement.style.setProperty('--copy-btn-size', COPY_BUTTON_SIZE);
+document.documentElement.style.setProperty('--copy-btn-distance', COPY_BUTTON_DISTANCE);
 
 
-// =======================================================
-// == FUNÇÕES PRINCIPAIS E EVENTOS                      ==
-// =======================================================
-document.addEventListener('DOMContentLoaded', () => {
+// ===== VERIFICAR SESSÃO ATIVA AO CARREGAR A PÁGINA =====
+async function checkExistingSession() {
+    try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        
+        if (error) {
+            console.error('Erro ao verificar sessão:', error);
+            return;
+        }
+        
+        if (session && session.user) {
+            console.log('Sessão ativa encontrada:', session.user.email);
+            currentUser = session.user;
+            loggedInUserEmail = session.user.email;
+            
+            // Carregar histórico de conversas
+            await loadUserConversations(currentUser.id);
+            
+            // Mostrar app
+            loginSection.style.display = 'none';
+            appShell.style.display = 'flex';
+            if (window.innerWidth <= 768) {
+                document.querySelector('.mobile-header').style.display = 'flex';
+            }
+            showSection('agents-info-section');
+        }
+    } catch (error) {
+        console.error('Erro ao verificar sessão:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
     renderAgentFormation(loginFormation, true);
-    // A função de desenhar linhas pode ser pesada, vamos otimizar
-    // setTimeout(() => drawLines('login-web-canvas', '#login-section .static-formation'), 100);
+    // Verificar se há sessão ativa
+    await checkExistingSession();
 });
 
-loginForm.addEventListener('submit', function(event) {
+
+loginForm.addEventListener('submit', async function(event ) {
     event.preventDefault();
-    if (emailInput.value === 'v' && passwordInput.value === '1') {
-        loggedInUserEmail = emailInput.value;
+    
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    
+    if (!email || !password) {
+        alert('Por favor, preencha email e senha!');
+        return;
+    }
+    
+    try {
+        console.log('Tentando fazer login com:', email);
+        
+        // Fazer login com Supabase
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+            password: password
+        });
+        
+        console.log('Resposta do Supabase:', { data, error });
+        
+        if (error) {
+            console.error('Erro de autenticação:', error);
+            alert('Erro no login: ' + (error.message || error));
+            return;
+        }
+        
+        if (!data || !data.user) {
+            alert('Erro: Usuário não encontrado');
+            return;
+        }
+        
+        // Login bem-sucedido
+        currentUser = data.user;
+        loggedInUserEmail = email;
+        // Carregar histórico de conversas do usuário
+        await loadUserConversations(currentUser.id);
+        console.log('Login bem-sucedido!', currentUser);
+        
+        // Limpar campos
+        emailInput.value = '';
+        passwordInput.value = '';
+        
+        // Mostrar app
         loginSection.style.display = 'none';
         appShell.style.display = 'flex';
         if (window.innerWidth <= 768) {
             document.querySelector('.mobile-header').style.display = 'flex';
         }
         showSection('agents-info-section');
-    } else {
-        alert('Chave de acesso ou código secreto incorretos!');
+        
+    } catch (error) {
+        console.error('Erro geral:', error);
+        alert('Erro ao fazer login: ' + error.message);
     }
 });
+
 
 function showSection(targetId) {
     contentSections.forEach(section => {
@@ -1286,7 +1442,12 @@ function showExpertDetails() {
     }
 }
 
-function showConversation() {
+async function showConversation() {
+    // Inicializar conversa com Supabase
+    if (currentUser) {
+        await initializeConversation(currentUser.id, activeChatAgentId);
+    }
+    
     const agent = agents[activeChatAgentId];
     if (!agent) return;
 
@@ -1336,18 +1497,61 @@ function addMessageToDom(text, role, container) {
         `;
     }
 
+    // Formatar o texto com quebras de linha e espaçamento
+    const formattedText = text
+        .split('\n')
+        .map(line => `<p style="margin: 0; line-height: 1.6; white-space: pre-wrap;">${line}</p>`)
+
+        .join('');
+
     messageGroup.innerHTML = `
         ${avatarHtml}
         <div class="message-content">
             <p class="message-sender">${senderName}</p>
-            <div class="message-bubble">${text}</div>
+            <div class="message-bubble ${senderClass === 'user' ? 'user-bubble' : 'agent-bubble'}" style="white-space: pre-wrap; line-height: 1.8; position: relative; height: auto; min-height: auto;">
+                ${formattedText}
+                ${senderClass === 'agent' ? `<button class="message-copy-btn" onclick="copyMessageToClipboard(this )"><img src="https://victorpaulovichbueno-gif.github.io/icone-copy-quantum/foto2" alt="Copiar"></button>` : ''}
+            </div>
         </div>
     `;
+
     
     const typingIndicator = document.getElementById('typing-indicator');
     container.insertBefore(messageGroup, typingIndicator);
     container.scrollTop = container.scrollHeight;
 }
+
+// Função para copiar mensagem
+function copyMessageToClipboard(button) {
+    const messageText = button.parentElement.textContent.trim();
+    navigator.clipboard.writeText(messageText).then(() => {
+        alert('Mensagem copiada!');
+    }).catch(err => {
+        console.error('Erro ao copiar:', err);
+    });
+}
+
+// ===== FUNÇÃO PARA FORÇAR ALTURA DO BALÃO DOURADO DO USUÁRIO =====
+function adjustUserMessageHeight() {
+    // Seleciona todos os balões de mensagem do usuário
+    const userBubbles = document.querySelectorAll('.message-group.user .message-bubble');
+    
+    userBubbles.forEach(bubble => {
+        // Remove altura anterior
+        bubble.style.height = 'auto';
+        
+        // Força altura mínima zero
+        bubble.style.minHeight = '0';
+        
+        // Define padding mínimo (margem interna)
+        bubble.style.padding = '0.3rem 0.8rem !important';
+        
+        // Calcula a altura exata do conteúdo
+        const scrollHeight = bubble.scrollHeight;
+        bubble.style.height = scrollHeight + 'px';
+    });
+}
+
 
 chatFormWeb.addEventListener('submit', async function(event) {
     event.preventDefault();
@@ -1360,6 +1564,12 @@ chatFormWeb.addEventListener('submit', async function(event) {
 
     const userMessage = { role: 'user', content: userMessageText };
     chatHistories[activeChatAgentId].push(userMessage);
+    
+    // Salvar mensagem do usuário no Supabase (DEPOIS de criar a variável)
+    if (currentUser && currentConversationId) {
+        await saveMessageToSupabase(userMessageText, 'user');
+    }
+    
     addMessageToDom(userMessageText, 'user', chatHistoryWeb);
     chatInputWeb.value = '';
     chatHistoryWeb.scrollTop = chatHistoryWeb.scrollHeight;
@@ -1379,6 +1589,12 @@ chatFormWeb.addEventListener('submit', async function(event) {
 
         const aiMessage = { role: 'assistant', content: aiResponseText };
         chatHistories[activeChatAgentId].push(aiMessage);
+        
+        // Salvar resposta da IA no Supabase
+        if (currentUser && currentConversationId) {
+            await saveMessageToSupabase(aiResponseText, 'assistant');
+        }
+
         addMessageToDom(aiResponseText, 'assistant', chatHistoryWeb);
 
     } catch (error) {
@@ -1387,6 +1603,7 @@ chatFormWeb.addEventListener('submit', async function(event) {
         addMessageToDom("Desculpe, não consegui me conectar ao meu núcleo de processamento. Por favor, verifique se o servidor está ativo e tente novamente.", 'assistant', chatHistoryWeb);
     }
 });
+
 
 async function getOpenAIResponse(agentId, history) {
     const apiUrl = 'https://quantum-app.onrender.com/ask';
@@ -1463,11 +1680,21 @@ if (sidebar) {
 }
 
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', function(event) {
-        event.preventDefault(); 
-        window.location.reload();
+    logoutBtn.addEventListener('click', async function(event) {
+        event.preventDefault();
+        
+        try {
+            await supabaseClient.auth.signOut();
+
+            currentUser = null;
+            window.location.reload();
+        } catch (error) {
+            console.error('Erro ao fazer logout:', error);
+            window.location.reload();
+        }
     });
 }
+
 
 const passwordToggle = document.getElementById('password-toggle');
 if (passwordToggle) {
@@ -1484,6 +1711,96 @@ if (mainNavButton) {
     });
 }
 
+// ===== AJUSTE AUTOMÁTICO DE ALTURA DO MESSAGE-BUBBLE =====
+function adjustMessageBubbleHeight() {
+    const bubbles = document.querySelectorAll('.message-bubble');
+    bubbles.forEach(bubble => {
+        bubble.style.height = 'auto'; // Reset
+        bubble.style.height = bubble.scrollHeight + 'px'; // Define altura exata
+    });
+}
+// ===== AJUSTE DE ALTURA DO BALÃO DOURADO DO USUÁRIO =====
+function adjustUserMessageHeight() {
+    const userBubbles = document.querySelectorAll('.message-group.user .message-bubble');
+    userBubbles.forEach(bubble => {
+        bubble.style.height = 'auto';
+        bubble.style.minHeight = '0';
+        bubble.style.padding = '0.3rem 0.8rem !important';
+        const scrollHeight = bubble.scrollHeight;
+        bubble.style.height = scrollHeight + 'px';
+    });
+}
+
+
+
+// ===== FUNÇÕES PARA GERENCIAR HISTÓRICO NO SUPABASE =====
+
+async function loadUserConversations(userId) {
+    try {
+        const response = await fetch(`/conversations/user/${userId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            data.conversations.forEach(conv => {
+                const agentId = conv.agent_id;
+                userConversations[agentId] = conv.id;
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao carregar conversas:', error);
+    }
+}
+
+async function initializeConversation(userId, agentId) {
+    try {
+        const response = await fetch(`/conversations/${userId}/${agentId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            currentConversationId = data.conversation_id;
+            userConversations[agentId] = data.conversation_id;
+            
+            if (data.messages && data.messages.length > 0) {
+                chatHistories[agentId] = data.messages;
+            } else {
+                const agent = agents[agentId];
+                chatHistories[agentId] = [
+                    { role: 'assistant', content: `(Mensagem de boas-vindas para ${agent.name}) Olá! Como posso te ajudar hoje?` }
+                ];
+            }
+            
+            renderActiveChatWeb();
+        }
+    } catch (error) {
+        console.error('Erro ao inicializar conversa:', error);
+    }
+}
+
+async function saveMessageToSupabase(content, role) {
+    try {
+        if (!currentUser || !currentConversationId) {
+            console.warn('Usuário ou conversa não inicializada');
+            return;
+        }
+        
+        const response = await fetch(`/conversations/${currentUser.id}/${activeChatAgentId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                conversation_id: currentConversationId,
+                content: content,
+                role: role
+            })
+        });
+        
+        const data = await response.json();
+        if (!data.success) {
+            console.error('Erro ao salvar mensagem:', data.error);
+        }
+    } catch (error) {
+        console.error('Erro ao salvar mensagem no Supabase:', error);
+    }
+}
 
     </script>
 </body>
