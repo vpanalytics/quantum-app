@@ -1,7 +1,3 @@
-# ===================================================================
-# == SERVIDOR PYTHON (BACKEND) PARA O CONSELHO QUANTUM           ==
-# ===================================================================
-
 import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -17,18 +13,23 @@ load_dotenv()
 # ===== INICIALIZAR SUPABASE =====
 supabase_url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_SECRET_KEY")
+
+# Validação das chaves do Supabase
+if not supabase_url or not supabase_key:
+    raise ValueError("As variáveis de ambiente SUPABASE_URL e SUPABASE_SECRET_KEY não foram definidas.")
+
 supabase: Client = create_client(supabase_url, supabase_key)
 
 # --- Configuração do Cliente OpenAI ---
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("A variável de ambiente OPENAI_API_KEY não foi definida.")
 
+client = OpenAI(api_key=openai_api_key)
 
 # --- Configuração do Servidor Flask ---
 app = Flask(__name__)
-CORS(app) # Permite que o seu site (HTML) converse com este servidor
-
+CORS(app)
 # SUBSTITUA TODO O DICIONÁRIO AGENT_PROMPTS POR ESTE BLOCO CORRIGIDO
 
 # ===================================================================
@@ -1126,17 +1127,16 @@ A Ação (Seu Protocolo de Onboarding):
 }
 
 # ===================================================================
-# == ROTA DA API: /ask                                           ==
+# == ROTA PRINCIPAL DA IA: /ask                                  ==
 # ===================================================================
-# Esta é a "porta de entrada" que o nosso site vai chamar.
 @app.route('/ask', methods=['POST'])
 def ask_agent():
     data = request.get_json()
     agent_id = data.get('agent_id')
     history = data.get('history', [])
 
-    if agent_id not in AGENT_PROMPTS:
-        return jsonify({"response": f"(Resposta simulada para {agent_id}): Olá! Este agente ainda não está conectado à IA."})
+    if not agent_id or agent_id not in AGENT_PROMPTS:
+        return jsonify({"error": "Agent ID é inválido ou não foi fornecido."}), 400
 
     messages = [{"role": "system", "content": AGENT_PROMPTS[agent_id]}]
     messages.extend(history)
@@ -1145,26 +1145,96 @@ def ask_agent():
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages,
-            max_tokens=300 # Aumentei um pouco para respostas mais completas
+            max_tokens=300
         )
         ai_response = completion.choices[0].message.content
         return jsonify({"response": ai_response})
 
     except Exception as e:
         print(f"!!! Erro ao chamar a API da OpenAI: {e}")
-        return jsonify({"error": "Desculpe, não consegui processar sua solicitação no momento. Verifique o terminal do servidor para mais detalhes."}), 500
+        return jsonify({"error": "Desculpe, não consegui processar sua solicitação no momento."}), 500
+
+# ===================================================================
+# == NOVAS ROTAS PARA GERENCIAR O HISTÓRICO NO SUPABASE          ==
+# ===================================================================
+
+# ROTA 1: Buscar ou criar uma conversa e retornar suas mensagens
+@app.route('/conversation', methods=['POST'])
+def get_or_create_conversation():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    agent_id = data.get('agent_id')
+
+    if not user_id or not agent_id:
+        return jsonify({"error": "user_id e agent_id são obrigatórios"}), 400
+
+    try:
+        # 1. Tenta encontrar uma conversa existente
+        response = supabase.table('conversations').select('id').eq('user_id', user_id).eq('agent_id', agent_id).execute()
+        
+        conversation_id = None
+        messages = []
+
+        if response.data:
+            # 2a. Se encontrou, pega o ID e busca as mensagens
+            conversation_id = response.data[0]['id']
+            messages_response = supabase.table('messages').select('*').eq('conversation_id', conversation_id).order('created_at', desc=False).execute()
+            messages = messages_response.data
+        else:
+            # 2b. Se não encontrou, cria uma nova conversa
+            new_conv_response = supabase.table('conversations').insert({'user_id': user_id, 'agent_id': agent_id}).execute()
+            if new_conv_response.data:
+                conversation_id = new_conv_response.data[0]['id']
+            else:
+                 return jsonify({"error": "Falha ao criar nova conversa", "details": new_conv_response.error.message if new_conv_response.error else "Unknown error"}), 500
+
+        return jsonify({
+            "success": True,
+            "conversation_id": conversation_id,
+            "messages": messages
+        })
+
+    except Exception as e:
+        print(f"!!! Erro em /conversation: {e}")
+        return jsonify({"error": str(e)}), 500
+
+# ROTA 2: Salvar uma nova mensagem
+@app.route('/message', methods=['POST'])
+def add_message():
+    data = request.get_json()
+    conversation_id = data.get('conversation_id')
+    content = data.get('content')
+    role = data.get('role')
+
+    if not all([conversation_id, content, role]):
+        return jsonify({"error": "conversation_id, content, e role são obrigatórios"}), 400
+
+    try:
+        response = supabase.table('messages').insert({
+            'conversation_id': conversation_id,
+            'content': content,
+            'role': role
+        }).execute()
+
+        if response.error:
+            raise Exception(response.error.message)
+
+        return jsonify({"success": True, "data": response.data})
+
+    except Exception as e:
+        print(f"!!! Erro em /message: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
-
+# ===================================================================
+# == ROTAS DE SERVIÇO E INICIALIZAÇÃO                            ==
+# ===================================================================
 @app.route('/')
 def home():
     return send_file('index.html')
 
-# ===================================================================
-# == INICIALIZAÇÃO DO SERVIDOR                                   ==
-# ===================================================================
 if __name__ == '__main__':
     print(">>> Servidor Quantum Minds iniciado com sucesso!")
-    print(">>> Escutando em http://127.0.0.1:5001" )
-    print(">>> Pressione CTRL+C para desligar o servidor.")
+    # A porta 5001 é ótima para desenvolvimento, o Render vai usar a porta dele.
+    # O host '0.0.0.0' é essencial para funcionar no Render.
     app.run(debug=True, port=5001, host='0.0.0.0')

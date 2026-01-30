@@ -1442,12 +1442,8 @@ function showExpertDetails() {
     }
 }
 
+// Substitua a função antiga por esta
 async function showConversation() {
-    // Inicializar conversa com Supabase
-    if (currentUser) {
-        await initializeConversation(currentUser.id, activeChatAgentId);
-    }
-    
     const agent = agents[activeChatAgentId];
     if (!agent) return;
 
@@ -1455,8 +1451,18 @@ async function showConversation() {
     chatHeaderTitle.textContent = agent.title;
     chatActiveAgentImg.src = agent.img;
 
-    renderActiveChatWeb();
+    // Limpa o chat visualmente enquanto carrega o histórico
+    chatHistoryWeb.innerHTML = '<p style="text-align:center; color: #6B7280;">Carregando histórico...</p>';
+
+    // Inicializa a conversa com o backend (que fala com o Supabase)
+    if (currentUser) {
+        await initializeConversation(currentUser.id, activeChatAgentId);
+    } else {
+        // Se não houver usuário logado (modo de teste), apenas renderiza o chat local
+        renderActiveChatWeb();
+    }
 }
+
 
 function renderActiveChatWeb() {
     const history = chatHistories[activeChatAgentId] || [];
@@ -1731,74 +1737,69 @@ function adjustUserMessageHeight() {
     });
 }
 
-
-
-// ===== FUNÇÕES PARA GERENCIAR HISTÓRICO NO SUPABASE =====
-
-async function loadUserConversations(userId) {
-    try {
-        const response = await fetch(`/conversations/user/${userId}` );
-        const data = await response.json();
-        
-        if (data.success) {
-            data.conversations.forEach(conv => {
-                const agentId = conv.agent_id;
-                userConversations[agentId] = conv.id;
-            });
-        }
-    } catch (error) {
-        console.error('Erro ao carregar conversas:', error);
-    }
-}
-
 async function initializeConversation(userId, agentId) {
     try {
-        const response = await fetch(`https://quantum-minds.onrender.com/ask` );
+        const response = await fetch(`https://quantum-minds.onrender.com/conversation`, { // ROTA CORRIGIDA
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: userId,
+                agent_id: agentId
+            } )
+        });
+
         const data = await response.json();
-        
+
         if (data.success) {
-            currentConversationId = data.conversation_id;
-            userConversations[agentId] = data.conversation_id;
+            currentConversationId = data.conversation_id; // Armazena o ID da conversa atual
             
+            // Se o Supabase retornou mensagens, usa elas.
             if (data.messages && data.messages.length > 0) {
-                chatHistories[agentId] = data.messages;
+                // Transforma o formato do Supabase para o formato que o chat espera
+                chatHistories[agentId] = data.messages.map(msg => ({
+                    role: msg.role,
+                    content: msg.content
+                }));
             } else {
-                const agent = agents[agentId];
-                chatHistories[agentId] = [
-                    { role: 'assistant', content: `(Mensagem de boas-vindas para ${agent.name}) Olá! Como posso te ajudar hoje?` }
-                ];
+                // Se não, cria um histórico inicial vazio (a IA vai dar a 1ª mensagem)
+                chatHistories[agentId] = [];
             }
             
+            // Renderiza o chat com o histórico carregado
             renderActiveChatWeb();
+        } else {
+            console.error('Falha ao inicializar conversa:', data.error);
         }
     } catch (error) {
-        console.error('Erro ao inicializar conversa:', error);
+        console.error('Erro de rede ao inicializar conversa:', error);
     }
 }
 
 async function saveMessageToSupabase(content, role) {
+    if (!currentConversationId) {
+        console.error('Não é possível salvar a mensagem, ID da conversa é nulo.');
+        return;
+    }
+
     try {
-        if (!currentUser || !currentConversationId) {
-            console.warn('Usuário ou conversa não inicializada');
-            return;
-        }
-        
-        const response = await fetch(`https://quantum-minds.onrender.com/ask`, {
+        const response = await fetch(`https://quantum-minds.onrender.com/message`, { // ROTA CORRIGIDA
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 conversation_id: currentConversationId,
                 content: content,
                 role: role
-            })
+            } )
         });
-        
+
         const data = await response.json();
         if (!data.success) {
-            console.error('Erro ao salvar mensagem:', data.error);
+            console.error('Erro ao salvar mensagem no backend:', data.error);
+        } else {
+            console.log('Mensagem salva com sucesso:', content);
         }
     } catch (error) {
-        console.error('Erro ao salvar mensagem no Supabase:', error);
+        console.error('Erro de rede ao salvar mensagem:', error);
     }
 }
 
