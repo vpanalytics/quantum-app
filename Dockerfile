@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5000
 
 # Comando para inicializar o banco de dados e rodar a aplicação
-CMD ["sh", "-c", "flask create-db && gunicorn --bind 0.0.0.0:$PORT app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
