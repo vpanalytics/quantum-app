@@ -2,17 +2,16 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai import OpenAI
-from dotenv import load_dotenv
 from flask import send_file
 
 # ===== IMPORTS SUPABASE =====
 from supabase import create_client, Client
 
-load_dotenv()
 
 # ===== INICIALIZAR SUPABASE =====
 supabase_url = os.getenv("SUPABASE_URL")
-supabase_key = os.getenv("SUPABASE_SECRET_KEY")
+supabase_key = os.getenv("SUPABASE_ANON_KEY")  # Mude de SECRET_KEY para ANON_KEY
+
 
 # Validação das chaves do Supabase
 if not supabase_url or not supabase_key:
