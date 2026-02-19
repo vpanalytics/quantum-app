@@ -13,8 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copia todo o código da aplicação para o container
 COPY . .
 
-# Expõe a porta que o Flask usará
+# Expõe a porta que o Flask usará (padrão para desenvolvimento)
 EXPOSE 5000
 
-# Comando para inicializar o banco de dados e rodar a aplicação
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
+# Comando para inicializar a aplicação com Gunicorn
+# O Render injeta a variável PORT automaticamente
+CMD ["gunicorn", "--bind", "0.0.0.0:${PORT:-5000}", "app:app"]
